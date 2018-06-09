@@ -1,0 +1,24 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "Mobile Web Specialist Certification Course - Restaurant Reviews project",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "serve -p 8000 & npm run watch",
+    "watch": "browser-sync start --proxy localhost:8000 src -f '**/*' --serveStatic ./node_modules -b 'google chrome' --no-notify "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rproenza86/mws-restaurant-stage-1.git"
+  },
+  "author": "Raul R. Proenza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rproenza86/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/rproenza86/mws-restaurant-stage-1#readme",
+  "devDependencies": {
+    "browser-sync": "^2.24.4"
+  }
+}
