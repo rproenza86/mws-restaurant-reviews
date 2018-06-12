@@ -154,6 +154,71 @@ class DBHelper {
   }
 
   /**
+   * Restaurant responsive image html element.
+   */
+  static createResponsiveImageElm(restaurant) {
+    const photograph = restaurant.photograph.split('.')[0];
+    const picture = document.createElement('picture');
+
+    const sourceWebp1 = document.createElement('source');
+    sourceWebp1.sizes="80vw";
+    sourceWebp1.media="(max-width: 350px)";
+    sourceWebp1.srcset=`http://localhost:5005/images/webp/30/${photograph}.webp`;
+    sourceWebp1.type="image/webp";
+    picture.append(sourceWebp1);
+
+    const sourceWebp2 = document.createElement('source');
+    sourceWebp2.sizes="80vw";
+    sourceWebp2.media="(max-width: 800px)";
+    sourceWebp2.srcset=`/images/webp/50/${photograph}.webp`;
+    sourceWebp2.type="image/webp";
+    picture.append(sourceWebp2);
+
+    const sourceWebp3 = document.createElement('source');
+    sourceWebp3.sizes="80vw";
+    sourceWebp3.media="(max-width: 2400px)";
+    sourceWebp3.srcset=`/images/webp/70/${photograph}.webp`;
+    sourceWebp3.type="image/webp";
+    picture.append(sourceWebp3);
+
+    const sourceJpgSmall = document.createElement('source');
+    sourceJpgSmall.sizes="80vw";
+    sourceJpgSmall.media="(max-width: 350px)";
+    sourceJpgSmall.srcset=`/images/small/${photograph}-350_small_1x.jpg 1x`;
+    sourceJpgSmall.type="image/jpeg";
+    picture.append(sourceJpgSmall);
+
+    const sourceJpgSmall2x = document.createElement('source');
+    sourceJpgSmall2x.sizes="80vw";
+    sourceJpgSmall2x.media="(max-width: 500px)";
+    sourceJpgSmall2x.srcset=`/images/small/${photograph}-500_small_2x.jpg 2x`;
+    sourceJpgSmall2x.type="image/jpeg";
+    picture.append(sourceJpgSmall2x);
+
+    const sourceJpgMedium = document.createElement('source');
+    sourceJpgMedium.sizes="80vw";
+    sourceJpgMedium.media="(max-width: 1399px)";
+    sourceJpgMedium.srcset=`/images/medium/${photograph}-800_medium_1x.jpg 1x`;
+    sourceJpgMedium.type="image/jpeg";
+    picture.append(sourceJpgMedium);
+
+    const sourceJpgLarge = document.createElement('source');
+    sourceJpgLarge.sizes="80vw";
+    sourceJpgLarge.media="(max-width: 1400px)";
+    sourceJpgLarge.srcset=`/images/large/${photograph}-1600_large_2x.jpg 2x`;
+    sourceJpgLarge.type="image/jpeg";
+    picture.append(sourceJpgLarge);
+
+    const image = document.createElement('img');
+    image.alt = `Photo of ${restaurant.name} Restaurant`;
+    image.className = 'restaurant-img';
+    image.src = `/images/large/${photograph}-1600_large_2x.jpg`;
+    picture.append(image);
+
+    return picture;
+  }
+
+  /**
    * Map marker for a restaurant.
    */
   static mapMarkerForRestaurant(restaurant, map) {

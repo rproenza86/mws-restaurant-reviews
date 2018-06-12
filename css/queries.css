@@ -1,4 +1,10 @@
 
+@media screen and (max-width: 350px){
+  #restaurants-list li {
+    padding: 10px 0 10px 10px;
+    margin: 5px;
+  }
+}
 @media screen and (min-width: 550px) and (max-width: 735px){
   #maincontent ul {
     display: grid;
