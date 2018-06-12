@@ -12,6 +12,7 @@ const urlsToCache = [
     'js/picture-polyfill.js',
     'css/styles.css',
     'css/queries.css',
+    'css/details-queries.css',
     'data/restaurants.json'
 ];
 
@@ -53,6 +54,9 @@ self.addEventListener('fetch', event => {
     const requestUrl = new URL(event.request.url);
 
     if (requestUrl.origin === location.origin) {
+        if (requestUrl.pathname === '/restaurant.html') {
+            return;
+        }
         if (requestUrl.pathname === '/') {
             event.respondWith(caches.match('/'));
             return;
