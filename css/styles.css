@@ -8,6 +8,7 @@ body,td,th,p{
 	line-height: 1.5;
 }
 body {
+  width: 100%;
 	background-color: #fdfdfd;
 	margin: 0;
 	position:relative;
@@ -36,15 +37,17 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	display: block;
 }
 #maincontent {
+  width: 100%;
   background-color: #f3f3f3;
   min-height: 100%;
 }
 #footer {
+  width: 100%;
   background-color: #444;
   color: #aaa;
   font-size: 8pt;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 25px 0;
   text-align: center;
   text-transform: uppercase;
 }
@@ -130,11 +133,14 @@ nav h1 a {
 }
 
 /* ====================== Restaurant Listing ====================== */
+.restaurants {
+  width: 100%;
+}
 #restaurants-list {
   background-color: #f3f3f3;
   list-style: outside none none;
   margin: 0;
-  padding: 30px 15px 60px;
+  padding: 30px 0 60px;
   text-align: center;
 }
 #restaurants-list li {
@@ -145,7 +151,7 @@ nav h1 a {
   min-height: 380px;
   padding: 0 30px 25px;
   text-align: left;
-  width: 270px;
+  min-width: 270px;
 }
 #restaurants-list .restaurant-img {
   background-color: #ccc;
