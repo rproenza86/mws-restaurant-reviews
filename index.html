@@ -48,6 +48,41 @@
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
 
+  <script type="text/javascript">
+    if ('serviceWorker' in navigator) {
+      const indexController = this;
+
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          if (!navigator.serviceWorker.controller) {
+            console.info('serviceWorker already installed.');
+            return;
+          }
+
+          if (registration.waiting) {
+              console.info('serviceWorker waiting.');
+              return;
+          }
+
+          if (registration.installing) {
+              console.info('serviceWorker being installed.');
+              return;
+          }
+
+          registration.addEventListener('updatefound', function() {
+              console.info('serviceWorker update found.');
+          });
+      });
+
+      // Ensure refresh is only called once.
+      // This works around a bug in "force update on reload".
+      var refreshing;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+          if (refreshing) return;
+          window.location.reload();
+          refreshing = true;
+      });
+    } else console.log('ServiceWorker not supported.');
+</script>
 </body>
 
 </html>
