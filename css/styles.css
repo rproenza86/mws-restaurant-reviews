@@ -158,7 +158,6 @@ nav h1 a {
   display: block;
   margin: 0;
   max-width: 100%;
-  min-height: 248px;
   min-width: 100%;
 }
 #restaurants-list li h1 {
@@ -207,7 +206,6 @@ nav h1 a {
 }
 .inside #map-container {
   top: 80px;
-  padding-top: 131px;
   width: 100%;
   height: 100%;
   min-width: 500px;
@@ -228,6 +226,11 @@ nav h1 a {
   width: 100%;
   background-color: #fff;
   border: .5px solid #ccc;
+}
+.inside nav[aria-label="Breadcrumb"]{
+  text-align: left;
+  background-color: #eee;
+  height: unset;
 }
 #restaurant-name {
   color: #f18200;
@@ -273,7 +276,7 @@ nav h1 a {
 #reviews-container {
   padding: 30px 0px 80px;
 }
-#reviews-container h2 {
+#reviews-container h3 {
   color: #f58500;
   font-size: 24pt;
   font-weight: 300;

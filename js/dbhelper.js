@@ -210,7 +210,7 @@ class DBHelper {
     picture.append(sourceJpgLarge);
 
     const image = document.createElement('img');
-    image.alt = `Photo of ${restaurant.name} Restaurant`;
+    image.alt = `${restaurant.name} Restaurant, ${restaurant.short_description}`;
     image.className = 'restaurant-img';
     image.src = `/images/large/${photograph}-1600_large_2x.jpg`;
     picture.append(image);

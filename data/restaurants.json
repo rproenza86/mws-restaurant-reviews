@@ -3,6 +3,7 @@
     {
       "id": 1,
       "name": "Mission Chinese Food",
+      "short_description": "classical indoor decoration",
       "neighborhood": "Manhattan",
       "photograph": "1.jpg",
       "address": "171 E Broadway, New York, NY 10002",
@@ -44,6 +45,7 @@
     {
       "id": 2,
       "name": "Emily",
+      "short_description": "the best Italian's pizzas",
       "neighborhood": "Brooklyn",
       "photograph": "2.jpg",
       "address": "919 Fulton St, Brooklyn, NY 11238",
@@ -85,6 +87,7 @@
     {
       "id": 3,
       "name": "Kang Ho Dong Baekjeong",
+      "short_description": "original Cambodian's cuisine",
       "neighborhood": "Manhattan",
       "photograph": "3.jpg",
       "address": "1 E 32nd St, New York, NY 10016",
@@ -126,6 +129,7 @@
     {
       "id": 4,
       "name": "Katz's Delicatessen",
+      "short_description": "delicious food of 1800 recipes",
       "neighborhood": "Manhattan",
       "photograph": "4.jpg",
       "address": "205 E Houston St, New York, NY 10002",
@@ -167,6 +171,7 @@
     {
       "id": 5,
       "name": "Roberta's Pizza",
+      "short_description": "if you like pizza you will love Roberta",
       "neighborhood": "Brooklyn",
       "photograph": "5.jpg",
       "address": "261 Moore St, Brooklyn, NY 11206",
@@ -208,6 +213,7 @@
     {
       "id": 6,
       "name": "Hometown BBQ",
+      "short_description": "the BBQ's Palace in Brooklyn",
       "neighborhood": "Brooklyn",
       "photograph": "6.jpg",
       "address": "454 Van Brunt St, Brooklyn, NY 11231",
@@ -249,6 +255,7 @@
     {
       "id": 7,
       "name": "Superiority Burger",
+      "short_description": "more than a Burger",
       "neighborhood": "Manhattan",
       "photograph": "7.jpg",
       "address": "430 E 9th St, New York, NY 10009",
@@ -290,6 +297,7 @@
     {
       "id": 8,
       "name": "The Dutch",
+      "short_description": "serving terrific Mediterranean plates since 1902",
       "neighborhood": "Manhattan",
       "photograph": "8.jpg",
       "address": "131 Sullivan St, New York, NY 10012",
@@ -331,6 +339,7 @@
     {
       "id": 9,
       "name": "Mu Ramen",
+      "short_description": "an oasis for your palate",
       "neighborhood": "Queens",
       "photograph": "9.jpg",
       "address": "1209 Jackson Ave, Queens, NY 11101",
@@ -372,6 +381,7 @@
     {
       "id": 10,
       "name": "Casa Enrique",
+      "short_description": "Enrique brings to us the best of Spain",
       "neighborhood": "Queens",
       "photograph": "10.jpg",
       "address": "5-48 49th Ave, Queens, NY 11101",
