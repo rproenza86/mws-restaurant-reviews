@@ -2,33 +2,29 @@
  * Common database helper functions.
  */
 class DBHelper {
-
   /**
    * Database URL.
-   * Change this to restaurants.json file location on your server.
    */
-  static get DATABASE_URL() {
-    const port = 5005 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+  static get API_SERVER_URL() {
+    const port = 1337; // Change this to your server port
+    return `http://localhost:${port}/restaurants`;
   }
-
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
+    const url = DBHelper.API_SERVER_URL;
+    fetch(url)
+      .then(function(response) {
+        if (response.ok) {
+          response.json().then(restaurants => callback(null, restaurants));
+        } else {
+          throw new Error(`Request failed  fetching restaurants. Returned status of ${xhr.status}`);
+        }
+      })
+      .catch(function(error) {
+        return callback(error, null);
+      });
   }
 
   /**
@@ -36,18 +32,18 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
+    const url = DBHelper.API_SERVER_URL;
+    fetch(`${url}/${id}`)
+      .then(function(response) {
+        if (response.ok) {
+          response.json().then(restaurant => callback(null, restaurant));
+        } else {
+          throw new Error('Restaurant does not exist');
         }
-      }
-    });
+      })
+      .catch(function(error) {
+        return callback(error, null);
+      });
   }
 
   /**
@@ -91,11 +87,13 @@ class DBHelper {
       if (error) {
         callback(error, null);
       } else {
-        let results = restaurants
-        if (cuisine != 'all') { // filter by cuisine
+        let results = restaurants;
+        if (cuisine != 'all') {
+          // filter by cuisine
           results = results.filter(r => r.cuisine_type == cuisine);
         }
-        if (neighborhood != 'all') { // filter by neighborhood
+        if (neighborhood != 'all') {
+          // filter by neighborhood
           results = results.filter(r => r.neighborhood == neighborhood);
         }
         callback(null, results);
@@ -113,9 +111,9 @@ class DBHelper {
         callback(error, null);
       } else {
         // Get all neighborhoods from all restaurants
-        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
+        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
         // Remove duplicates from neighborhoods
-        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
+        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i);
         callback(null, uniqueNeighborhoods);
       }
     });
@@ -131,9 +129,9 @@ class DBHelper {
         callback(error, null);
       } else {
         // Get all cuisines from all restaurants
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
+        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
         // Remove duplicates from cuisines
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
+        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
         callback(null, uniqueCuisines);
       }
     });
@@ -143,14 +141,14 @@ class DBHelper {
    * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
-    return (`./restaurant.html?id=${restaurant.id}`);
+    return `./restaurant.html?id=${restaurant.id}`;
   }
 
   /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    return `/img/${restaurant.photograph}`;
   }
 
   /**
@@ -161,52 +159,52 @@ class DBHelper {
     const picture = document.createElement('picture');
 
     const sourceWebp1 = document.createElement('source');
-    sourceWebp1.sizes="80vw";
-    sourceWebp1.media="(max-width: 350px)";
-    sourceWebp1.srcset=`http://localhost:5005/images/webp/30/${photograph}.webp`;
-    sourceWebp1.type="image/webp";
+    sourceWebp1.sizes = '80vw';
+    sourceWebp1.media = '(max-width: 350px)';
+    sourceWebp1.srcset = `http://localhost:5005/images/webp/30/${photograph}.webp`;
+    sourceWebp1.type = 'image/webp';
     picture.append(sourceWebp1);
 
     const sourceWebp2 = document.createElement('source');
-    sourceWebp2.sizes="80vw";
-    sourceWebp2.media="(max-width: 800px)";
-    sourceWebp2.srcset=`/images/webp/50/${photograph}.webp`;
-    sourceWebp2.type="image/webp";
+    sourceWebp2.sizes = '80vw';
+    sourceWebp2.media = '(max-width: 800px)';
+    sourceWebp2.srcset = `/images/webp/50/${photograph}.webp`;
+    sourceWebp2.type = 'image/webp';
     picture.append(sourceWebp2);
 
     const sourceWebp3 = document.createElement('source');
-    sourceWebp3.sizes="80vw";
-    sourceWebp3.media="(max-width: 2400px)";
-    sourceWebp3.srcset=`/images/webp/70/${photograph}.webp`;
-    sourceWebp3.type="image/webp";
+    sourceWebp3.sizes = '80vw';
+    sourceWebp3.media = '(max-width: 2400px)';
+    sourceWebp3.srcset = `/images/webp/70/${photograph}.webp`;
+    sourceWebp3.type = 'image/webp';
     picture.append(sourceWebp3);
 
     const sourceJpgSmall = document.createElement('source');
-    sourceJpgSmall.sizes="80vw";
-    sourceJpgSmall.media="(max-width: 350px)";
-    sourceJpgSmall.srcset=`/images/small/${photograph}-350_small_1x.jpg 1x`;
-    sourceJpgSmall.type="image/jpeg";
+    sourceJpgSmall.sizes = '80vw';
+    sourceJpgSmall.media = '(max-width: 350px)';
+    sourceJpgSmall.srcset = `/images/small/${photograph}-350_small_1x.jpg 1x`;
+    sourceJpgSmall.type = 'image/jpeg';
     picture.append(sourceJpgSmall);
 
     const sourceJpgSmall2x = document.createElement('source');
-    sourceJpgSmall2x.sizes="80vw";
-    sourceJpgSmall2x.media="(max-width: 500px)";
-    sourceJpgSmall2x.srcset=`/images/small/${photograph}-500_small_2x.jpg 2x`;
-    sourceJpgSmall2x.type="image/jpeg";
+    sourceJpgSmall2x.sizes = '80vw';
+    sourceJpgSmall2x.media = '(max-width: 500px)';
+    sourceJpgSmall2x.srcset = `/images/small/${photograph}-500_small_2x.jpg 2x`;
+    sourceJpgSmall2x.type = 'image/jpeg';
     picture.append(sourceJpgSmall2x);
 
     const sourceJpgMedium = document.createElement('source');
-    sourceJpgMedium.sizes="80vw";
-    sourceJpgMedium.media="(max-width: 1399px)";
-    sourceJpgMedium.srcset=`/images/medium/${photograph}-800_medium_1x.jpg 1x`;
-    sourceJpgMedium.type="image/jpeg";
+    sourceJpgMedium.sizes = '80vw';
+    sourceJpgMedium.media = '(max-width: 1399px)';
+    sourceJpgMedium.srcset = `/images/medium/${photograph}-800_medium_1x.jpg 1x`;
+    sourceJpgMedium.type = 'image/jpeg';
     picture.append(sourceJpgMedium);
 
     const sourceJpgLarge = document.createElement('source');
-    sourceJpgLarge.sizes="80vw";
-    sourceJpgLarge.media="(max-width: 1400px)";
-    sourceJpgLarge.srcset=`/images/large/${photograph}-1600_large_2x.jpg 2x`;
-    sourceJpgLarge.type="image/jpeg";
+    sourceJpgLarge.sizes = '80vw';
+    sourceJpgLarge.media = '(max-width: 1400px)';
+    sourceJpgLarge.srcset = `/images/large/${photograph}-1600_large_2x.jpg 2x`;
+    sourceJpgLarge.type = 'image/jpeg';
     picture.append(sourceJpgLarge);
 
     const image = document.createElement('img');
@@ -227,9 +225,8 @@ class DBHelper {
       title: restaurant.name,
       url: DBHelper.urlForRestaurant(restaurant),
       map: map,
-      animation: google.maps.Animation.DROP}
-    );
+      animation: google.maps.Animation.DROP
+    });
     return marker;
   }
-
 }
