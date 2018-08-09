@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>  
+<head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
-  <link rel="stylesheet" href="css/detail-queries.css" type="text/css">
+  <script src="js/idb.js"></script>
   <title>Restaurant Info</title>
+  <meta name="Description" content="Restaurant Reviews develop unique web applications.
+            Using moderns and selected techniques we warranty a RADICAL improvement of the web
+            experience based on Reliability, Speed, clients Engaging, clients Conversion and clients Retention. What do we promise: +2x more pages views,
+            +70% increase in time spent, +80% more conversions on iOS, User acquisition costs 10 times more chip and more">
+  <meta property="og:image" content="img_src/manifest/icon-512x512.png" />
+  <link rel="icon" href="img_src/favicon.ico">
+
+  <!-- See https://goo.gl/OOhYW5 -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="shortcut icon" href="img_src/manifest/icon-48x48.png">
+  <!-- See https://goo.gl/qRE0vM -->
+  <meta name="theme-color" content="#3f51b5">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/10.15.0/lazyload.min.js"></script>
 </head>
 
 <body class="inside">
   <!-- Beginning header -->
-    <header>
-      <!-- Beginning nav -->
-      <nav>
-        <h1><a href="/">Restaurant Reviews</a></h1>
-      </nav>
-      <!-- Beginning breadcrumb -->
-      <nav aria-label="Breadcrumb">
-        <ul id="breadcrumb" >
-          <li><a href="/">Home</a></li>
-        </ul>
-      </nav>
-      <!-- End breadcrumb -->
-      <!-- End nav -->
-    </header>
+  <header>
+    <!-- Beginning nav -->
+    <nav>
+      <h1>
+        <a href="/">Restaurant Reviews</a>
+      </h1>
+    </nav>
+    <!-- Beginning breadcrumb -->
+    <nav aria-label="Breadcrumb">
+      <ul id="breadcrumb">
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- End breadcrumb -->
+    <!-- End nav -->
+  </header>
   <!-- End header -->
 
   <!-- Beginning main -->
-    <main id="maincontent">
+  <main id="maincontent">
 
-      <!-- Beginning map -->
-      <section id="map-container">
-        <div id="map" role="Map with the Restaurant's location"></div>
-      </section>
-      <!-- End map -->
+    <!-- Beginning map -->
+    <section id="map-container">
+      <div id="map" role="Map with the Restaurant's location"></div>
+    </section>
+    <!-- End map -->
 
-      <!-- Beginning restaurant -->
-      <section id="restaurant-container">
-        <h2 id="restaurant-name"></h2>
-        <div id="restaurant-img"> </div>
-        <p id="restaurant-cuisine"></p>
-        <p id="restaurant-address"></p>
-        <table id="restaurant-hours"></table>
-      </section>
-      <!-- end restaurant -->
+    <!-- Beginning restaurant -->
+    <section id="restaurant-container">
+      <h2 id="restaurant-name"></h2>
+      <div id="restaurant-img"> </div>
+      <p id="restaurant-cuisine"></p>
+      <p id="restaurant-address"></p>
+      <table id="restaurant-hours"></table>
+    </section>
+    <!-- end restaurant -->
 
-      <!-- Beginning reviews -->
-      <section id="reviews-container">
-          <ul id="reviews-list"></ul>
-        </section>
-      <!-- End reviews -->
-    </main>
+    <!-- Beginning reviews -->
+    <section id="reviews-container">
+      <ul id="reviews-list"></ul>
+    </section>
+    <!-- End reviews -->
+  </main>
   <!-- End main -->
 
   <!-- Beginning footer -->
-    <footer id="footer">
-      Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
-    </footer>
+  <footer id="footer">
+    Copyright (c) 2017
+    <a href="/">
+      <strong>Restaurant Reviews</strong>
+    </a> All Rights Reserved.
+  </footer>
   <!-- End footer -->
 
   <!-- Beginning scripts -->
@@ -71,6 +90,28 @@
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJGBRUer96vE0n1I3fZtjXgtw14iU-aZU&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
+  <noscript>
+    <h1>Please enable javascript</h1>
+  </noscript>
+
+  <!-- Lazy loading the css scripts -->
+  <noscript id="deferred-styles">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/queries.css">
+  </noscript>
+  <script>
+    var loadDeferredStyles = function () {
+      var addStylesNode = document.getElementById("deferred-styles");
+      var replacement = document.createElement("div");
+      replacement.innerHTML = addStylesNode.textContent;
+      document.body.appendChild(replacement)
+      addStylesNode.parentElement.removeChild(addStylesNode);
+    };
+    var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    if (raf) raf(function () { window.setTimeout(loadDeferredStyles, 0); });
+    else window.addEventListener('load', loadDeferredStyles);
+  </script>
 
 </body>
 
