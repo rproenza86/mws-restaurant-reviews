@@ -42,18 +42,38 @@ Make the site accessible. Using what you've learned about web accessibility, ens
 
 Cache the static site for offline use. Using Cache API and a ServiceWorker, cache the data for the website so that any page (including images) that has been visited is accessible offline.
 
+### Stage 3
+
+In **Stage three** add a form to allow users to create their own reviews: In previous versions of the application, users could only read reviews from the database. You will need to add a form that adds new reviews to the database. The form should include the user’s name, the restaurant id, the user’s rating, and whatever comments they have. Submitting the form should update the server when the user is online.
+
+Add functionality to defer updates until the user is connected: If the user is not online, the app should notify the user that they are not connected, and save the users' data to submit automatically when re-connected. In this case, the review should be deferred and sent to the server when connection is re-established (but the review should still be visible locally even before it gets to the server.)
+
+#### Performance Specifications
+
+Lighthouse targets for each category exceed:
+
+- Progressive Web App: >90
+- Performance: >90
+- Accessibility: >90
+
+## Requirements
+
+Users are able to mark a restaurant as a favorite, this toggle is visible in the application. A form is added to allow users to add their own reviews for a restaurant. Form submission works properly and adds a new review to the database.
+
+The client application works offline. JSON responses are cached using the IndexedDB API. Any data previously accessed while connected is reachable while offline. User is able to add a review to a restaurant while offline and the review is sent to the server when connectivity is re-established.
+
 ## Project URL on Github
 
 https://github.com/rproenza86/mws-restaurant-stage-1
 
 ## Acceptance criteria
 
-https://review.udacity.com/#!/rubrics/1090/view
+https://review.udacity.com/#!/rubrics/1132/view
 
 ## Style guide
 
 http://udacity.github.io/frontend-nanodegree-styleguide/index.html
 
-## Stage 2 Performance Results
+## Stage 3 Performance Results
 
 ![lighthouse](audits/lighthouse-chromioum-audit-08082018.png)

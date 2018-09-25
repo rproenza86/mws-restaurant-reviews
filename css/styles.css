@@ -240,7 +240,7 @@ nav h1 a {
 }
 .inside #footer {
   bottom: 0;
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
 }
 .inside #restaurant-container {
@@ -263,6 +263,38 @@ nav h1 a {
   text-transform: uppercase;
   line-height: 1.1;
   text-align: center;
+}
+#review-form {
+  text-align: center;
+  min-height: 300px;
+  padding: 0 100px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  min-height: 360px;
+  padding: 24px;
+}
+#crane-shipping-form {
+  margin: 10px 10px 0 10px;
+}
+.crane-row,
+.crane-field,
+.crane-text-field,
+.crane-select {
+  width: 100%;
+}
+.mdc-card {
+  height: 580px;
+  width: 350px;
+  margin-bottom: 10px;
+}
+.mdc-card__media {
+  background-image: url('../img_src/reviews-1200x670.jpg');
 }
 #restaurant-img {
   width: 100%;

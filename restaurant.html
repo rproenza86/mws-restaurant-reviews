@@ -3,9 +3,10 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <!-- Material Components for the web with minimal setup -->
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
   <script src="js/idb.js"></script>
   <title>Restaurant Info</title>
   <meta name="Description" content="Restaurant Reviews develop unique web applications.
@@ -69,6 +70,75 @@
     <section id="reviews-container">
       <ul id="reviews-list"></ul>
     </section>
+
+    <section class="crane-main review-form-container" id="review-form">
+
+        <div class="mdc-card">
+          <div class="mdc-card__media mdc-card__media--square">
+            <div class="mdc-card__media-content">Restaurant Review</div>
+          </div>
+
+                <form method="post" action="." id="crane-shipping-form">
+                  <div class="crane-row">
+                    <div class="crane-field">
+                      <div class="crane-text-field mdc-text-field mdc-text-field--box">
+                        <input class="crane-text-field__input mdc-text-field__input" id="crane-name-input" type="text" required>
+                        <label class="crane-floating-label mdc-floating-label" for="crane-name-input">
+                          Name
+                        </label>
+                        <div class="mdc-line-ripple"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="crane-row">
+                    <div class="crane-field">
+                      <div class="crane-select mdc-select mdc-select--box">
+                        <select class="crane-select__native-control mdc-select__native-control" id="crane-state-input" required>
+                          <option value="" selected></option>
+                          <option value="1">One Star</option>
+                          <option value="2">Two Stars</option>
+                          <option value="3">Three Stars</option>
+                          <option value="4">Four Stars</option>
+                          <option value="5">Five Stars</option>
+                        </select>
+                        <label class="crane-select__label mdc-floating-label" for="crane-state-input">
+                          Rate
+                        </label>
+                        <div class="mdc-line-ripple"></div>
+                      </div>
+                    </div>
+                    <div class="crane-field">
+                      <div class="crane-text-field mdc-text-field mdc-text-field--box">
+                        <!--
+                                        Note: `pattern="[0-9]*"` tells Safari on iPhone to display a large numeric keypad without decimal points.
+                                        See https://www.filamentgroup.com/lab/type-number.html
+                                      -->
+                        <input class="crane-text-field__input mdc-text-field__input" id="crane-zip-code-input" type="text" required
+                          minlength="10" maxlength="1000" lines="4">
+                        <label class="crane-floating-label mdc-floating-label" for="crane-zip-code-input">
+                          Review
+                        </label>
+                        <div class="mdc-line-ripple"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mdc-card__actions ">
+                    <div class="crane-row crane-row--submit">
+                      <button type="submit" class="crane-button mdc-button mdc-button--raised">Save</button>
+                    </div>
+                  </div>
+
+                </form>
+
+          <!-- <div class="mdc-card__actions">
+            <div class="mdc-card__action-buttons">
+              <button type="submit" class="crane-button mdc-button mdc-button--raised">Save</button>
+            </div>
+          </div> -->
+        </div>
+
+    </section>
     <!-- End reviews -->
   </main>
   <!-- End main -->
@@ -98,6 +168,7 @@
   <noscript id="deferred-styles">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/queries.css">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@0.39.3/dist/material-components-web.min.css">
   </noscript>
   <script>
     var loadDeferredStyles = function () {

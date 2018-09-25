@@ -163,3 +163,17 @@ getParameterByName = (name, url) => {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+const shippingForm = document.querySelector('#crane-shipping-form');
+shippingForm.addEventListener('submit', evt => {
+  evt.preventDefault();
+  alert('Success!');
+});
+
+new window.mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
+new window.mdc.select.MDCSelect(document.querySelector('.mdc-select'));
+
+const textFieldElements = [].slice.call(document.querySelectorAll('.mdc-text-field'));
+textFieldElements.forEach(textFieldEl => {
+  new window.mdc.textField.MDCTextField(textFieldEl);
+});
