@@ -45,7 +45,26 @@ fetchRestaurantFromURL = callback => {
       fillRestaurantHTML();
       callback(null, restaurant);
     });
+
+    getReviews(callback);
   }
+};
+
+getReviews = callback => {
+  const id = getParameterByName('id');
+
+  DBHelper.fetchRestaurantReviewById(id, (error, reviews) => {
+    self.reviews = reviews;
+    if (!reviews) {
+      console.error(error);
+      return;
+    }
+    // fill reviews
+    fillReviewsHTML(reviews);
+    if (callback) {
+      callback(null, reviews);
+    }
+  });
 };
 
 /**
@@ -71,8 +90,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
 };
 
 /**
@@ -118,6 +135,17 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 };
 
 /**
+ * Add new review HTML to the webpage.
+ */
+AddNewReview = review => {
+  if (reviews) {
+    const ul = document.getElementById('reviews-list');
+    ul.appendChild(createReviewHTML(review));
+  }
+  return;
+};
+
+/**
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = review => {
@@ -126,9 +154,11 @@ createReviewHTML = review => {
   name.innerHTML = review.name;
   li.appendChild(name);
 
-  const date = document.createElement('p');
-  date.innerHTML = review.date;
-  li.appendChild(date);
+  if (review.date) {
+    const date = document.createElement('p');
+    date.innerHTML = review.date;
+    li.appendChild(date);
+  }
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
@@ -164,10 +194,14 @@ getParameterByName = (name, url) => {
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
 
+/**
+ * Restaurant review form. Material Design component setup
+ */
 const shippingForm = document.querySelector('#crane-shipping-form');
 shippingForm.addEventListener('submit', evt => {
   evt.preventDefault();
-  alert('Success!');
+
+  DBHelper.saveReview(AddNewReview);
 });
 
 new window.mdc.ripple.MDCRipple(document.querySelector('.mdc-button'));
@@ -177,3 +211,36 @@ const textFieldElements = [].slice.call(document.querySelectorAll('.mdc-text-fie
 textFieldElements.forEach(textFieldEl => {
   new window.mdc.textField.MDCTextField(textFieldEl);
 });
+
+const snackbar = new window.mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+const notifyAppOffline = () => {
+  const notificationObject = {
+    message: 'Application working OFFLINE',
+    actionText: 'Ok',
+    actionHandler: function () {
+      console.log('my cool function');
+    },
+    timeout: 5000
+  };
+
+  snackbar.show(notificationObject);
+}
+const notifyAppOnline = () => {
+  const notificationObject = {
+    message: 'Application working ONLINE',
+    actionText: 'Ok',
+    actionHandler: function() {
+      console.log('my cool function');
+    },
+    timeout: 5000
+  };
+
+  snackbar.show(notificationObject);
+};
+
+window.addEventListener('online', (event) => {
+  notifyAppOnline();
+}
+);
+
+window.addEventListener('offline', (event) => notifyAppOffline());

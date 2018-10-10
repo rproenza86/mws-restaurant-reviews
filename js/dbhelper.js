@@ -13,7 +13,12 @@ var dbPromise = idb
           upgradeDb.createObjectStore('restaurants', { keyPath: 'name' });
         case 1:
           let restaurantsStore = upgradeDb.transaction.objectStore('restaurants');
-          restaurantsStore.createIndex('by-id', 'id'); // index creation to queryfy the idb people table by restaurantId// index creation to queryfy the idb people table by age
+          restaurantsStore.createIndex('by-id', 'id'); // index creation to queryfy the idb people table by restaurantId
+        case 2:
+          upgradeDb.createObjectStore('review_queue', { keyPath: 'restaurant_id' }); // queue to store review  submitted offline
+        case 1:
+          let reviewStore = upgradeDb.transaction.objectStore('review_queue');
+          reviewStore.createIndex('by-id', 'restaurant_id');
       }
     })
   : null;
@@ -24,9 +29,11 @@ class DBHelper {
    */
   static get API_SERVER_URL() {
     const port = 1337; // Change this to your server port
-    return `http://localhost:${port}/restaurants`;
+    return `http://localhost:${port}`;
   }
-
+  /**
+   * Get list of cached restaurants
+   */
   static showCachedRestaurants() {
     return dbPromise.then(function(db) {
       const idIndex = db
@@ -38,11 +45,24 @@ class DBHelper {
     });
   }
   /**
+   * Get list of cached reviews enqueued because app was offline, when online will all the queue will be resubmitted
+   */
+  static getEnqueueReviews() {
+    return dbPromise.then(function(db) {
+      const idIndex = db
+        .transaction('review_queue')
+        .objectStore('review_queue')
+        .index('by-id');
+
+      return idIndex.getAll();
+    });
+  }
+  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
     const url = DBHelper.API_SERVER_URL;
-    fetch(url)
+    fetch(`${url}/restaurants`)
       .then(function(response) {
         if (response.ok) {
           response.json().then(restaurants => {
@@ -86,7 +106,7 @@ class DBHelper {
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
     const url = DBHelper.API_SERVER_URL;
-    fetch(`${url}/${id}`)
+    fetch(`${url}/restaurants/${id}`)
       .then(function(response) {
         if (response.ok) {
           response.json().then(restaurant => callback(null, restaurant));
@@ -96,6 +116,89 @@ class DBHelper {
       })
       .catch(function(error) {
         return callback(error, null);
+      });
+  }
+
+  /**
+   * Fetch a restaurant reviews by its ID.
+   */
+  static fetchRestaurantReviewById(id, callback) {
+    // fetch all restaurants with proper error handling.
+    const url = DBHelper.API_SERVER_URL;
+    fetch(`${url}/reviews?restaurant_id=${id}`)
+      .then(function(response) {
+        if (response.ok) {
+          response.json().then(reviews => callback(null, reviews));
+        } else {
+          throw new Error('Restaurant does not have reviews');
+        }
+      })
+      .catch(function(error) {
+        return callback(error, null);
+      });
+  }
+  /**
+   * Send a restaurant review form data  to the server.
+   */
+  static saveReview(callback) {
+    // Bind the FormData object and the form element
+    const FD = new FormData(shippingForm);
+
+    const id = getParameterByName('id');
+    FD.append('restaurant_id', id);
+
+    fetch(`${DBHelper.API_SERVER_URL}/reviews/`, { method: 'POST', body: FD })
+      .then(response => response.json())
+      .then(response => {
+        console.log('Success:', response);
+        callback(response);
+        shippingForm.reset();
+      })
+      .catch(error => {
+        console.error('Oops! Something went wrong. Error:', error);
+
+        const formData = {
+          restaurant_id: null,
+          data:[]
+        };
+        const fakeResponse = {};
+
+        for (const value of FD.entries()) {
+          formData.data.push(value);
+
+          if (value[0] === 'restaurant_id') {
+            formData.restaurant_id = value[1];
+          }
+
+          fakeResponse[value[0]] = value[1];
+        }
+
+        DBHelper.saveReviewForRetry(formData);
+
+        callback(fakeResponse);
+        shippingForm.reset();
+      });
+  }
+
+  static saveReviewForRetry(review) {
+    dbPromise &&
+      dbPromise
+        .then(function(db) {
+          const tx = db.transaction('review_queue', 'readwrite');
+          const reviewStore = tx.objectStore('review_queue');
+
+          reviewStore.put(review);
+          return tx.complete;
+        })
+        .then(function() {
+          console.log('Review added to browser db.');
+        });
+  }
+
+  static processReviewQueue() {
+    DBHelper.getEnqueueReviews()
+      .then(queue => {
+        console.log(queue);
       });
   }
 

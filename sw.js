@@ -14,7 +14,10 @@ const urlsToCache = [
   '/css/queries.css',
   '/css/detail-queries.css',
   '/data/restaurants.json',
-  '/js/idb.js'
+  '/js/idb.js',
+  'js/material-components-web.min.js',
+  'css/material-components-web.min.css',
+  'js/lazyload.min.js'
 ];
 
 self.importScripts('/js/idb.js');

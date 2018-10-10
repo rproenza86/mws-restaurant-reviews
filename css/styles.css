@@ -296,6 +296,10 @@ nav h1 a {
 .mdc-card__media {
   background-image: url('../img_src/reviews-1200x670.jpg');
 }
+.mdc-card__media-content {
+  font-weight: bold;
+  font-size: 20pt;
+}
 #restaurant-img {
   width: 100%;
   text-align: center;
