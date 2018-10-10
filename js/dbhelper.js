@@ -15,7 +15,7 @@ var dbPromise = idb
           let restaurantsStore = upgradeDb.transaction.objectStore('restaurants');
           restaurantsStore.createIndex('by-id', 'id'); // index creation to queryfy the idb people table by restaurantId
         case 2:
-          upgradeDb.createObjectStore('review_queue', { keyPath: 'restaurant_id' }); // queue to store review  submitted offline
+          upgradeDb.createObjectStore('review_queue', { keyPath: 'name' }); // queue to store review  submitted offline
         case 1:
           let reviewStore = upgradeDb.transaction.objectStore('review_queue');
           reviewStore.createIndex('by-id', 'restaurant_id');
@@ -140,12 +140,17 @@ class DBHelper {
   /**
    * Send a restaurant review form data  to the server.
    */
-  static saveReview(callback) {
-    // Bind the FormData object and the form element
-    const FD = new FormData(shippingForm);
+  static saveReview(callback, formData = null) {
+    let FD;
+    if (!formData) {
+      // Bind the FormData object and the form element
+      FD = new FormData(shippingForm);
 
-    const id = getParameterByName('id');
-    FD.append('restaurant_id', id);
+      const id = getParameterByName('id') || window.localStorage.getItem('restaurantId');
+      FD.append('restaurant_id', id);
+    } else {
+      FD = DBHelper.generateFormData(formData);
+    }
 
     fetch(`${DBHelper.API_SERVER_URL}/reviews/`, { method: 'POST', body: FD })
       .then(response => response.json())
@@ -153,13 +158,17 @@ class DBHelper {
         console.log('Success:', response);
         callback(response);
         shippingForm.reset();
+        if (formData) {
+          DBHelper.deleteReviewFromLocalDB(response);
+        }
       })
       .catch(error => {
         console.error('Oops! Something went wrong. Error:', error);
 
         const formData = {
           restaurant_id: null,
-          data:[]
+          name: '',
+          data: []
         };
         const fakeResponse = {};
 
@@ -167,7 +176,12 @@ class DBHelper {
           formData.data.push(value);
 
           if (value[0] === 'restaurant_id') {
-            formData.restaurant_id = value[1];
+            formData.restaurant_id =
+              value[1] !== 'null' ? value[1] : window.localStorage.getItem('restaurantId');
+          }
+
+          if (value[0] === 'name') {
+            formData.name = value[1];
           }
 
           fakeResponse[value[0]] = value[1];
@@ -178,6 +192,35 @@ class DBHelper {
         callback(fakeResponse);
         shippingForm.reset();
       });
+  }
+
+  static generateFormData(formData) {
+    const FD = new FormData();
+
+    formData.data.forEach(data => {
+      const [formField, fieldData] = data;
+      FD.append(formField, fieldData);
+    });
+
+    return FD;
+  }
+
+  static deleteReviewFromLocalDB(review) {
+    dbPromise.then(function (db) {
+      const tx = db.transaction('review_queue', 'readwrite');
+      const reviewIndex = tx.objectStore('review_queue');
+
+      return reviewIndex.openCursor();
+    }).then(function deleteLocalStoredReview(cursor) {
+      if (!cursor) return; // Empty case
+      if (cursor.value.name === review.name && cursor.value.restaurant_id === review.restaurant_id ) {
+        cursor.delete();
+      }
+
+      return cursor.continue().then(deleteLocalStoredReview);
+    }).then(function () {
+      console.log('Done deleting review: ', review);
+    });
   }
 
   static saveReviewForRetry(review) {
@@ -196,10 +239,11 @@ class DBHelper {
   }
 
   static processReviewQueue() {
-    DBHelper.getEnqueueReviews()
-      .then(queue => {
-        console.log(queue);
+    DBHelper.getEnqueueReviews().then(queue => {
+      queue.map(formData => {
+        DBHelper.saveReview(() => {}, formData);
       });
+    });
   }
 
   /**

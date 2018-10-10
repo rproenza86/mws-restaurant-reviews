@@ -244,6 +244,7 @@ const notifyAppOnline = () => {
 
 window.addEventListener('online', event => {
   notifyAppOnline();
+  DBHelper.processReviewQueue();
 });
 
 window.addEventListener('offline', event => notifyAppOffline());
