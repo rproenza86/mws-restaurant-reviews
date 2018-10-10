@@ -30,7 +30,7 @@ fetchRestaurantFromURL = callback => {
     callback(null, self.restaurant);
     return;
   }
-  const id = getParameterByName('id');
+  const id = getParameterByName('id') || window.localStorage.getItem('restaurantId');
   if (!id) {
     // no id found in URL
     error = 'No restaurant id in URL';
@@ -51,7 +51,11 @@ fetchRestaurantFromURL = callback => {
 };
 
 getReviews = callback => {
-  const id = getParameterByName('id');
+  const id = getParameterByName('id') || window.localStorage.getItem('restaurantId');
+
+  if (!id) {
+    return console.error('Invalid restaurantId to fetch review');
+  }
 
   DBHelper.fetchRestaurantReviewById(id, (error, reviews) => {
     self.reviews = reviews;
@@ -217,14 +221,14 @@ const notifyAppOffline = () => {
   const notificationObject = {
     message: 'Application working OFFLINE',
     actionText: 'Ok',
-    actionHandler: function () {
+    actionHandler: function() {
       console.log('my cool function');
     },
     timeout: 5000
   };
 
   snackbar.show(notificationObject);
-}
+};
 const notifyAppOnline = () => {
   const notificationObject = {
     message: 'Application working ONLINE',
@@ -238,9 +242,8 @@ const notifyAppOnline = () => {
   snackbar.show(notificationObject);
 };
 
-window.addEventListener('online', (event) => {
+window.addEventListener('online', event => {
   notifyAppOnline();
-}
-);
+});
 
-window.addEventListener('offline', (event) => notifyAppOffline());
+window.addEventListener('offline', event => notifyAppOffline());

@@ -231,6 +231,10 @@
         refreshing = true;
       });
     } else console.log('ServiceWorker not supported.');
+
+    window.onbeforeunload = function (event) {
+      // window.localStorage.setItem('restaurantId', 0);
+    };
   </script>
 
 </body>

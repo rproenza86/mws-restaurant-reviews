@@ -73,32 +73,37 @@ self.addEventListener('activate', event => {
 });
 
 function continueRequest(event) {
-  event.respondWith(
-    caches
-      .match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request)
-          .then(response => {
-            if (response.status === 404) {
-              return fetch('https://media.giphy.com/media/FrajBDPikVqBG/giphy.gif');
-            }
+  try {
+    event.respondWith(
+      caches
+        .match(event.request)
+        .then(function (response) {
+          // Cache hit - return response
+          if (response) {
             return response;
-          })
-          .catch(err => {
-            console.error(err);
-            return new Response('Resource request failed');
-          });
-      })
-      .catch(error => console.error('Error fetching', error))
-  );
+          }
+          return fetch(event.request)
+            .then(response => {
+              if (response.status === 404) {
+                return fetch('https://media.giphy.com/media/FrajBDPikVqBG/giphy.gif');
+              }
+              return response;
+            })
+            .catch(err => {
+              console.error(err);
+              return new Response('Resource request failed');
+            });
+        })
+        .catch(error => console.error('Error fetching', error))
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
 }
 
 function processInternalRequest(requestUrl, event) {
-  if (requestUrl.pathname === '/restaurant.html') {
+  if (requestUrl.pathname === '/restaurant.html' && !isRestaurantDetails(requestUrl)) {
     return;
   }
   if (requestUrl.pathname === '/') {
@@ -124,6 +129,13 @@ function processInternalApiRequest() {
     });
 }
 
+const isRestaurantDetails = requestUrl => {
+  const search = requestUrl.search;
+  const urlWithQueryParams = search.match(/id=/g); // requestUrl.pathname == restaurant.html?id=5
+
+  return !!urlWithQueryParams;
+};
+
 self.addEventListener('fetch', event => {
   // Let the browser do its default thing
   // for non-GET requests.
@@ -131,11 +143,15 @@ self.addEventListener('fetch', event => {
 
   const requestUrl = new URL(event.request.url);
 
+  if (isRestaurantDetails(requestUrl)) {
+    return;
+  }
+
   if (requestUrl.origin === location.origin) {
-    processInternalRequest(requestUrl, event);
+    return processInternalRequest(requestUrl, event);
   } else {
     if (requestUrl.pathname.startsWith('/restaurants')) {
-      event.respondWith(
+      return event.respondWith(
         (async function() {
           // Try to get the response from a cache.
           try {
@@ -167,7 +183,7 @@ self.addEventListener('fetch', event => {
         })()
       );
     } else {
-      continueRequest(event);
+      return continueRequest(event);
     }
   }
 });

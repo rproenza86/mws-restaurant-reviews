@@ -234,6 +234,7 @@
           "Saturday": "11:00 am - 12:00 am",
           "Sunday": "11:00 am - 12:00 am"
         },
+        "photograph": "5",
         "createdAt": 1504095567183,
         "updatedAt": 1504095567183,
         "is_favorite": false,
