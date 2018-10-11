@@ -50,6 +50,9 @@ Project specifications:
 
 #### Stage 2 Performance Results
 
+* [Audit file](audits/lighthouse-chromioum-audit-08082018.json)
+
+* Audit screenshoot
 ![lighthouse](audits/lighthouse-chromioum-audit-08082018.png)
 
 ### Stage 3
@@ -79,6 +82,9 @@ Project specifications:
 
 #### Stage 3 Performance Results
 
+* [Audit file](audits/lighthouse-chromioum-audit-10112018.json)
+
+* Audit screenshoot
 ![lighthouse](audits/lighthouse-chromioum-audit-10112018.png)
 
 ## Project URL on Github

@@ -206,21 +206,27 @@ class DBHelper {
   }
 
   static deleteReviewFromLocalDB(review) {
-    dbPromise.then(function (db) {
-      const tx = db.transaction('review_queue', 'readwrite');
-      const reviewIndex = tx.objectStore('review_queue');
+    dbPromise
+      .then(function(db) {
+        const tx = db.transaction('review_queue', 'readwrite');
+        const reviewIndex = tx.objectStore('review_queue');
 
-      return reviewIndex.openCursor();
-    }).then(function deleteLocalStoredReview(cursor) {
-      if (!cursor) return; // Empty case
-      if (cursor.value.name === review.name && cursor.value.restaurant_id === review.restaurant_id ) {
-        cursor.delete();
-      }
+        return reviewIndex.openCursor();
+      })
+      .then(function deleteLocalStoredReview(cursor) {
+        if (!cursor) return; // Empty case
+        if (
+          cursor.value.name === review.name &&
+          cursor.value.restaurant_id === review.restaurant_id
+        ) {
+          cursor.delete();
+        }
 
-      return cursor.continue().then(deleteLocalStoredReview);
-    }).then(function () {
-      console.log('Done deleting review: ', review);
-    });
+        return cursor.continue().then(deleteLocalStoredReview);
+      })
+      .then(function() {
+        console.log('Done deleting review: ', review);
+      });
   }
 
   static saveReviewForRetry(review) {
@@ -431,5 +437,24 @@ class DBHelper {
       animation: google.maps.Animation.DROP
     });
     return marker;
+  }
+
+  /**
+   * Send a restaurant favorite state to the server.
+   */
+  static updateFavoriteRestaurant(restaurant_id, is_favorite) {
+    fetch(
+      `${DBHelper.API_SERVER_URL}/restaurants/${restaurant_id}/?is_favorite=${is_favorite}`,
+      {
+        method: 'PUT'
+      }
+    )
+      .then(response => response.json())
+      .then(response => {
+        console.log('Favorite a restaurant status updated successfully:', response);
+      })
+      .catch(error => {
+        console.error('Oops! Something went wrong while Favorite a restaurant updating. Error:', error);
+      });
   }
 }

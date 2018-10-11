@@ -156,13 +156,57 @@ createRestaurantHTML = restaurant => {
   address.innerHTML = restaurant.address;
   li.append(address);
 
+  const favAndMoreContainer = document.createElement('div');
+  favAndMoreContainer.style.setProperty('display', 'flex');
+  favAndMoreContainer.style.setProperty('flex-direction', 'row');
+  favAndMoreContainer.style.setProperty('align-items', 'flex-start');
+  favAndMoreContainer.style.setProperty('justify-content', 'space-between');
+  li.append(favAndMoreContainer);
+
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   more.onclick = () => {
     window.localStorage.setItem('restaurantId', restaurant.id);
   };
-  li.append(more);
+  favAndMoreContainer.append(more);
+
+  const favoriteButton = document.createElement('button');
+  favoriteButton.id = 'add-to-favorites';
+  favoriteButton.setAttribute('class', 'mdc-icon-button');
+  favoriteButton.setAttribute('arial-hidden', 'true');
+  favoriteButton.setAttribute('arial-pressed', 'false');
+  favoriteButton.style.setProperty('align-self', 'center');
+
+  favoriteButton.addEventListener(
+    'MDCIconButtonToggle:change',
+    function(event) {
+      console.log('toggled event change', event.detail);
+      console.log('corresponding restaurant', restaurant);
+      DBHelper.updateFavoriteRestaurant(restaurant.id, event.detail.isOn);
+    },
+    false
+  );
+
+  const iconFavoriteButtonOn = document.createElement('i');
+  iconFavoriteButtonOn.setAttribute(
+    'class',
+    'material-icons mdc-icon-button__icon mdc-icon-button__icon--on'
+  );
+  iconFavoriteButtonOn.innerHTML = 'favorite';
+  favoriteButton.append(iconFavoriteButtonOn);
+
+  const iconFavoriteButtonOff = document.createElement('i');
+  iconFavoriteButtonOff.setAttribute('class', 'material-icons mdc-icon-button__icon');
+  iconFavoriteButtonOff.innerHTML = 'favorite_border';
+  favoriteButton.append(iconFavoriteButtonOff);
+
+  const iconButtonRipple = new window.mdc.ripple.MDCRipple(favoriteButton);
+  iconButtonRipple.unbounded = true;
+  const favoriteToggle = new window.mdc.iconButton.MDCIconButtonToggle(favoriteButton);
+  favoriteToggle.on = restaurant.is_favorite;
+
+  favAndMoreContainer.append(favoriteButton);
 
   return li;
 };
