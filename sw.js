@@ -5,6 +5,7 @@ const cacheWhitelist = [CACHE_POSTS_IMAGES, CACHE_NAME];
 
 const urlsToCache = [
   '/',
+  '/index.html',
   '/images/',
   '/js/main.js',
   '/js/dbhelper.js',
