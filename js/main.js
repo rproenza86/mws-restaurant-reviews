@@ -184,6 +184,7 @@ createRestaurantHTML = restaurant => {
       console.log('toggled event change', event.detail);
       console.log('corresponding restaurant', restaurant);
       DBHelper.updateFavoriteRestaurant(restaurant.id, event.detail.isOn);
+      DBHelper.updateRestaurantInLocalDB(restaurant, event.detail.isOn);
     },
     false
   );
@@ -220,6 +221,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
     google.maps.event.addListener(marker, 'click', () => {
       window.location.href = marker.url;
+      window.localStorage.setItem('restaurantId', restaurant.id);
     });
     self.markers.push(marker);
   });

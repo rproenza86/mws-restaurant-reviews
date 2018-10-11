@@ -16,7 +16,7 @@ const dbPromise = idb
           restaurantsStore.createIndex('by-id', 'id'); // index creation to queryfy the idb people table by restaurantId
         case 2:
           upgradeDb.createObjectStore('review_queue', { keyPath: 'name' }); // queue to store review  submitted offline
-        case 1:
+        case 3:
           let reviewStore = upgradeDb.transaction.objectStore('review_queue');
           reviewStore.createIndex('by-id', 'restaurant_id');
       }
@@ -443,18 +443,46 @@ class DBHelper {
    * Send a restaurant favorite state to the server.
    */
   static updateFavoriteRestaurant(restaurant_id, is_favorite) {
-    fetch(
-      `${DBHelper.API_SERVER_URL}/restaurants/${restaurant_id}/?is_favorite=${is_favorite}`,
-      {
-        method: 'PUT'
-      }
-    )
+    fetch(`${DBHelper.API_SERVER_URL}/restaurants/${restaurant_id}/?is_favorite=${is_favorite}`, {
+      method: 'PUT'
+    })
       .then(response => response.json())
       .then(response => {
         console.log('Favorite a restaurant status updated successfully:', response);
       })
       .catch(error => {
-        console.error('Oops! Something went wrong while Favorite a restaurant updating. Error:', error);
+        console.error(
+          'Oops! Something went wrong while Favorite a restaurant updating. Error:',
+          error
+        );
+      });
+  }
+  /**
+   * Update restaurant favorite state
+   */
+  static updateRestaurantInLocalDB(restaurant, is_favorite) {
+    dbPromise
+      .then(function(db) {
+        const tx = db.transaction('restaurants', 'readwrite');
+        const restaurantIndex = tx.objectStore('restaurants');
+
+        return restaurantIndex.openCursor();
+      })
+      .then(function updateLocalStoredRestaurant(cursor) {
+        if (!cursor) return; // Empty case
+        if (
+          cursor.value.name === restaurant.name &&
+          cursor.value.id === restaurant.id
+        ) {
+          const restaurantClone = { ...cursor.value }
+          restaurantClone.is_favorite = is_favorite;
+          cursor.update(restaurantClone);
+        }
+
+        return cursor.continue().then(updateLocalStoredRestaurant);
+      })
+      .then(function() {
+        console.log('Done updating restaurant: ', restaurant);
       });
   }
 }
