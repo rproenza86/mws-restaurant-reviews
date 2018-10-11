@@ -6,8 +6,8 @@
   <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <!-- Material Components for the web with minimal setup -->
-  <script src="js/material-components-web.min.js"></script>
-  <script src="js/idb.js"></script>
+  <script src="js/assets/material-components-web.min.js"></script>
+  <script src="js/idb/idb.js"></script>
   <title>Restaurant Info</title>
   <meta name="Description" content="Restaurant Reviews develop unique web applications.
             Using moderns and selected techniques we warranty a RADICAL improvement of the web
@@ -22,7 +22,7 @@
   <!-- See https://goo.gl/qRE0vM -->
   <meta name="theme-color" content="#3f51b5">
 
-  <script src="js/lazyload.min.js"></script>
+  <script src="js/assets/lazyload.min.js"></script>
 </head>
 
 <body class="inside">
@@ -184,7 +184,7 @@
     <link rel="stylesheet" href="css/material-components-web.min.css">
   </noscript>
   <script>
-    var loadDeferredStyles = function () {
+    const loadDeferredStyles = function () {
       var addStylesNode = document.getElementById("deferred-styles");
       var replacement = document.createElement("div");
       replacement.innerHTML = addStylesNode.textContent;

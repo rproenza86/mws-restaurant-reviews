@@ -1,5 +1,5 @@
 let restaurant;
-var map;
+let map;
 
 /**
  * Initialize Google map, called from HTML.
@@ -85,7 +85,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const picture = DBHelper.createResponsiveImageElm(restaurant);
   pictureParent.append(picture);
 
-  var myLazyLoad = LazyLoad ? new LazyLoad({ elements_selector: '.restaurant-img' }) : null;
+  const myLazyLoad = LazyLoad ? new LazyLoad({ elements_selector: '.restaurant-img' }) : null;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;

@@ -5,7 +5,7 @@
 /**
  * indexedDB access point
  */
-var dbPromise = idb
+const dbPromise = idb
   ? idb.open('restaurants-db', 1, function(upgradeDb) {
       // 1- Open a database.
       switch (upgradeDb.oldVersion) {

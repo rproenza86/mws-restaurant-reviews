@@ -94,3 +94,14 @@ https://github.com/rproenza86/mws-restaurant-stage-1
 ## Style guide
 
 http://udacity.github.io/frontend-nanodegree-styleguide/index.html
+
+## How to run the web app
+* Start client server:
+
+    `$ npm start`
+
+* Start backend server:
+
+    `$ cd server-stage-3/`
+
+    `$ npm start`
