@@ -172,7 +172,6 @@ createRestaurantHTML = restaurant => {
   favAndMoreContainer.append(more);
 
   const favoriteButton = document.createElement('button');
-  favoriteButton.id = 'add-to-favorites';
   favoriteButton.setAttribute('class', 'mdc-icon-button');
   favoriteButton.setAttribute('arial-hidden', 'true');
   favoriteButton.setAttribute('arial-pressed', 'false');

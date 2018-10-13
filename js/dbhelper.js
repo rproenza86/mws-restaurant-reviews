@@ -19,6 +19,13 @@ const dbPromise = idb
         case 3:
           let reviewStore = upgradeDb.transaction.objectStore('review_queue');
           reviewStore.createIndex('by-id', 'restaurant_id');
+        case 4:
+          upgradeDb.createObjectStore('restaurants_reviews', {
+            keyPath: 'restaurant_id'
+          }); // restaurant reviews
+        case 5:
+          let reviewsStore = upgradeDb.transaction.objectStore('restaurants_reviews');
+          reviewsStore.createIndex('by-id', 'restaurant_id');
       }
     })
   : null;
@@ -89,6 +96,10 @@ class DBHelper {
                 .then(function() {
                   console.log('Restaurants added to browser db.');
                 });
+
+              for (const restaurant of restaurants) {
+                DBHelper.fetchRestaurantReviewById(restaurant.id, () => {});
+              }
             }
           });
         } else {
@@ -128,7 +139,22 @@ class DBHelper {
     fetch(`${url}/reviews?restaurant_id=${id}`)
       .then(function(response) {
         if (response.ok) {
-          response.json().then(reviews => callback(null, reviews));
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.indexOf("application/json") !== -1) {
+            response.json().then(reviews => {
+              DBHelper.saveRestaurantReviewsOnLocalDB(id, reviews);
+              callback(null, reviews);
+            });
+          } else {
+            DBHelper.getRestaurantsReviewsFromLocalDB()
+              .then(reviewsList => {
+                for (restaurant of reviewsList) {
+                  if (restaurant.restaurant_id == id) {
+                    return callback(null, restaurant.reviews);
+                  }
+                }
+            });
+          }
         } else {
           throw new Error('Restaurant does not have reviews');
         }
@@ -242,6 +268,42 @@ class DBHelper {
         .then(function() {
           console.log('Review added to browser db.');
         });
+  }
+  /**
+   * Local save of review by restaurant_id for offline support
+   * @param {*} restaurant_id
+   * @param {*} reviewsList
+   */
+  static saveRestaurantReviewsOnLocalDB(restaurant_id, reviewsList) {
+    dbPromise &&
+      dbPromise
+        .then(function(db) {
+          const tx = db.transaction('restaurants_reviews', 'readwrite');
+          const reviewStore = tx.objectStore('restaurants_reviews');
+          const reviews = {
+            restaurant_id: restaurant_id,
+            reviews: reviewsList
+          };
+
+          reviewStore.put(reviews);
+          return tx.complete;
+        })
+        .then(function() {
+          // console.log(`Restaurant ${restaurant_id}Reviews added to browser idb.`);
+        });
+  }
+  /**
+    * Get list of cached  restaurants reviews
+    */
+  static getRestaurantsReviewsFromLocalDB() {
+    return dbPromise.then(function (db) {
+      const idIndex = db
+        .transaction('restaurants_reviews')
+        .objectStore('restaurants_reviews')
+        .index('by-id');
+
+      return idIndex.getAll();
+    });
   }
 
   static processReviewQueue() {
@@ -470,11 +532,8 @@ class DBHelper {
       })
       .then(function updateLocalStoredRestaurant(cursor) {
         if (!cursor) return; // Empty case
-        if (
-          cursor.value.name === restaurant.name &&
-          cursor.value.id === restaurant.id
-        ) {
-          const restaurantClone = { ...cursor.value }
+        if (cursor.value.name === restaurant.name && cursor.value.id === restaurant.id) {
+          const restaurantClone = { ...cursor.value };
           restaurantClone.is_favorite = is_favorite;
           cursor.update(restaurantClone);
         }

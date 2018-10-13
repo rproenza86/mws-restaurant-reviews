@@ -14,39 +14,42 @@ function readRestaurantsFromDB() {
     });
 }
 
+function getRequestToMatch(event) {
+    const requestUrl = new URL(event.request.url);
+    if (isRestaurantDetails(requestUrl)) {
+        return new Request( requestUrl.origin + requestUrl.pathname);
+    }
+    return event.request;
+}
+
 function continueRequest(event) {
     try {
-        event.respondWith(
-            caches
-                .match(event.request)
-                .then(function (response) {
-                    // Cache hit - return response
-                    if (response) {
-                        return response;
-                    }
-                    return fetch(event.request)
-                        .then(response => {
-                            if (response.status === 404) {
-                                return fetch('https://media.giphy.com/media/FrajBDPikVqBG/giphy.gif');
-                            }
-                            return response;
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            return new Response('Resource request failed');
-                        });
+        event.respondWith(caches
+            .match(getRequestToMatch(event))
+            .then(function(response) {
+              // Cache hit - return response
+              if (response) {
+                return response;
+              }
+              return fetch(event.request)
+                .then(response => {
+                  if (response.status === 404) {
+                    return fetch('https://media.giphy.com/media/FrajBDPikVqBG/giphy.gif');
+                  }
+                  return response;
                 })
-                .catch(error => console.error('Error fetching', error))
-        );
+                .catch(err => {
+                  console.error(err);
+                  return new Response('Resource request failed');
+                });
+            })
+            .catch(error => console.error('Error fetching', error)));
     } catch (error) {
-        console.log(error);
+        console.log(error, event.request);
     }
 }
 
 function processInternalRequest(requestUrl, event) {
-    if (requestUrl.pathname === '/restaurant.html' && !isRestaurantDetails(requestUrl)) {
-        return;
-    }
     if (requestUrl.pathname === '/') {
         event.respondWith(caches.match('/'));
         return;
@@ -97,26 +100,3 @@ function serveImage(request) {
         });
     });
 }
-
-const CACHE_NAME = 'mws-restaurant-stage-v1';
-const CACHE_POSTS_IMAGES = 'mws-content-imgs';
-
-const cacheWhitelist = [CACHE_POSTS_IMAGES, CACHE_NAME];
-
-const urlsToCache = [
-    '/',
-    '/index.html',
-    '/images/',
-    '/js/main.js',
-    '/js/dbhelper.js',
-    '/js/restaurant_info.js',
-    '/js/assets/picture-polyfill.js',
-    '/css/styles.css',
-    '/css/queries.css',
-    '/css/detail-queries.css',
-    '/data/restaurants.json',
-    '/js/idb/idb.js',
-    'js/assets/material-components-web.min.js',
-    'css/material-components-web.min.css',
-    'js/assets/lazyload.min.js'
-];

@@ -145,7 +145,10 @@
 
 
     <!-- Network Connection Status  -->
-    <div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true">
+    <div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true" style="
+    padding: 0;
+    width: 100%;
+    ">
       <div class="mdc-snackbar__text"></div>
       <div class="mdc-snackbar__action-wrapper">
         <button type="button" class="mdc-snackbar__action-button"></button>
@@ -170,6 +173,7 @@
   <script type="text/javascript" src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/restaurant_info.js"></script>
+  <script type="text/javascript" src="js/network_status_watcher.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJGBRUer96vE0n1I3fZtjXgtw14iU-aZU&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
@@ -180,7 +184,7 @@
   <!-- Lazy loading the css scripts -->
   <noscript id="deferred-styles">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/queries.css">
+    <link rel="stylesheet" href="css/detail-queries.css">
     <link rel="stylesheet" href="css/material-components-web.min.css">
   </noscript>
   <script>
@@ -231,10 +235,6 @@
         refreshing = true;
       });
     } else console.log('ServiceWorker not supported.');
-
-    window.onbeforeunload = function (event) {
-      // window.localStorage.setItem('restaurantId', 0);
-    };
   </script>
 
 </body>
