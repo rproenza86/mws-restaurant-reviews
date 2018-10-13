@@ -82,10 +82,27 @@ Project specifications:
 
 #### Stage 3 Performance Results
 
-* [Audit file](audits/lighthouse-chromioum-audit-10112018.json)
+> The Performance Specifications Audit was performed using Google Chrome Version 69.0.3497.100
+
+> **Audits configurations options**: Device: Mobile, Throttling: Simulated Fast 3G, 4x CPU Slowdown, Clear storage option unchecked.
+
+>**Important to know:** While performing audit _**should not be enable**_ the _'Disable cache'_ option in the **Network panel** nor the _'Update on Reload'_ and _'Bypass for network'_ options on the **Application** panel **Service Workers** tab.
+
+* [Audit file](audits/lighthouse-chromioum-audit-10132018.json)
 
 * Audit screenshoot
-![lighthouse](audits/lighthouse-chromioum-audit-10112018.png)
+![lighthouse](audits/lighthouse-chromioum-audit-10132018.png)
+
+#### How to check Lighthouse Performance Results
+
+To have a best performance web server I published online the frontend version of this POC.
+
+Use the below url the run the Audit:
+* https://public-wvqmntfknh.now.sh/
+
+> **Disclaimer:** The only intent of this is to allow to perform the PWA checks of the home page (`index.html`, the detail view is out of scope for this scenario. To check the complete offline work run the web app locally)
+
+> **Requirement**: The backend server should be running locally. Check the "*How to run the web app*" section.
 
 ## Project URL on Github
 
