@@ -1,4 +1,4 @@
-FROM nginx
+FROM staticfloat/nginx-certbot
 
 # replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -6,7 +6,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # File Author / Maintainer
 MAINTAINER Raul Rodriguez Proenza
 
-COPY . /usr/share/nginx/html
+COPY ./client /usr/share/nginx/html
 
 ENV SERVER=/var/www/server
 COPY server-stage-3 "$SERVER"
@@ -50,3 +50,8 @@ CMD ["sh", "start.sh"]
 #  docker run -P --name mws-restaurant -d rproenza86/mws-restaurant:v0.0.1
 # Push docker image: docker push rproenza86/mws-restaurant:v0.0.1
 # Check docker image online listing it: docker search rproenza86/mws-restaurant
+# Deploy to Azure: az container create --resource-group mws-restaurant --name app-with-ssl -f aci-deploy.yaml --dns-name-label supercrap --environment-variables CERTBOT_EMAIL=rpoenza86@localhost
+
+# Azure online demos
+# http://restaurantsreviews.centralus.azurecontainer.io
+# https://168.61.212.255

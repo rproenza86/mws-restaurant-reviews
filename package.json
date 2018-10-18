@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "serve -p 9009",
+    "start": "firebase serve",
     "serve": "serve -p 9009 & npm run watch",
     "watch": "browser-sync start --port 5005 --proxy localhost:9009 src -f '**/*' --serveStatic ./node_modules -b 'google chrome' --no-notify ",
     "images-build": "grunt --force"

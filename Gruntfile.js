@@ -20,7 +20,7 @@ module.exports = function(grunt) {
           expand: true,
           src: ['*.{gif,jpg,png}'],
           cwd: 'img_src',
-          dest: 'images/small'
+          dest: 'client/images/small'
         }]
       },
 
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
           expand: true,
           src: ['*.{gif,jpg,png}'],
           cwd: 'img_src',
-          dest: 'images/medium'
+          dest: 'client/images/medium'
         }]
       },
 
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
           expand: true,
           src: ['*.{gif,jpg,png}'],
           cwd: 'img_src',
-          dest: 'images/large'
+          dest: 'client/images/large'
         }]
       }
     },
@@ -66,9 +66,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'img_src/', 
+          cwd: 'img_src/',
           src: ['**/*.{png,jpg,gif}'],
-          dest: 'images/webp/30'
+          dest: 'client/images/webp/30'
         }]
       },
       '50%': {
@@ -77,9 +77,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'img_src/', 
+          cwd: 'img_src/',
           src: ['**/*.{png,jpg,gif}'],
-          dest: 'images/webp/50'
+          dest: 'client/images/webp/50'
         }]
       },
       '70%': {
@@ -88,9 +88,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'img_src/', 
+          cwd: 'img_src/',
           src: ['**/*.{png,jpg,gif}'],
-          dest: 'images/webp/70'
+          dest: 'client/images/webp/70'
         }]
       }
     },
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
     mkdir: {
       dev: {
         options: {
-          create: ['images/opt']
+          create: ['client/images/opt']
         },
       },
     },
