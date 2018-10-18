@@ -7,7 +7,7 @@
 https://roca-bws.firebaseapp.com/
 
 ## Video recorded demo
-[![Video recorded demo](demo/preview.png)](demo/Restaurants_reviews-Demo.MP4 "Video recorded demo")
+[![Video recorded demo](demo/preview.png)](https://youtu.be/WEluWHnxQJM "Video recorded demo")
 
 ## Webapp technical requirements
 
